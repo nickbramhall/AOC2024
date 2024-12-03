@@ -1,21 +1,9 @@
 import re
 
-input_file = 'input/day3-sample.txt'
+input_file = 'input/day3.txt'
 
-# Read in all the data and strip out any whitespace at the end of lines
-all_lines = [line.rstrip('\n') for line in open(input_file)]
-
-# print(all_lines)
-
-sum=0
-
-for line in all_lines:
-    all_expressions = re.findall("mul\([\d]{1,3},[\d]{1,3}\)", line)
-
-    print(all_expressions)
-
-    # sum = 0
-
+def sum_multiplier(all_expressions):
+    sum=0
     for result in all_expressions:
         numbers = re.search("[\d]{1,3},[\d]{1,3}", result)
         # print(numbers.group())
@@ -23,67 +11,34 @@ for line in all_lines:
         multiplier = int(first) * int(second)
         # print(multiplier)
         sum = sum + multiplier
+    return sum
 
-print(sum)
+# Read in all the data and strip out any whitespace at the end of lines
+all_lines = [line.rstrip('\n') for line in open(input_file)]
+
+all_input=''
+for line in all_lines:
+    all_input=all_input+line
+
+all_expressions = re.findall("mul\([\d]{1,3},[\d]{1,3}\)", all_input)
+sum=sum_multiplier(all_expressions)
+
+print(f'Part 1: {sum}')
 
 # Part 2
 
-# dont = all_lines[0].find("don't()")
+update = all_input
+i=True
 
-donts = []
-dos = []
+while i is True:
+    dont = update.find("don't()")
+    if dont == -1:
+        break
+    next_do = update.find("do()",dont)
+    end = len(update)
+    update = update[0:dont] + update[next_do:end]
 
-for match in re.finditer("don't\(\)", all_lines[0]):
-    print(match.span(), match.group())
-    donts.append(match.span()[1])
+all_expressions = re.findall("mul\([\d]{1,3},[\d]{1,3}\)", update)
+sum=sum_multiplier(all_expressions)
 
-for match in re.finditer("do\(\)", all_lines[0]):
-    print(match.span(), match.group())
-    dos.append(match.span()[1])
-
-    
-
-# dont = re.split("don't()", all_lines[0])
-
-print(donts)
-print(dos)
-
-slices = []
-
-for position_do in dos:
-    for position_dont in donts:
-        if position_dont > position_do:
-            slices.append(position_do)
-            slices.append(position_dont)
-            break
-
-print(slices)
-
-final=''
-
-for i in range(0,len(slices)-1,2):
-    print(f'Slicing {slices[i]} to {slices[i+1]}')
-    sliced=all_lines[0][slices[i]:slices[i+1]]
-    final = final + sliced
-
-print(final)
-
-
-all_expressions = re.findall("mul\([\d]{1,3},[\d]{1,3}\)", final)
-
-print(all_expressions)
-
-sum = 0
-
-for result in all_expressions:
-    numbers = re.search("[\d]{1,3},[\d]{1,3}", result)
-    # print(numbers.group())
-    first,second = numbers.group().split(",")
-    multiplier = int(first) * int(second)
-    # print(multiplier)
-    sum = sum + multiplier
-
-print(sum)
-
-
-
+print(f'Part 2: {sum}')
