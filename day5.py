@@ -4,16 +4,12 @@ rules, pages = [part.splitlines() for part in open(input_file).read().split("\n\
 
 list1=[]
 list2=[]
+list3=[]
 
 for line in rules:
-    try:
-        output=line.split("|")
-        list1.append(int(output[0]))
-        list2.append(int(output[1]))
-    except:
-        continue
-
-list3=[]
+    output=line.split("|")
+    list1.append(int(output[0]))
+    list2.append(int(output[1]))
 
 for line in pages:
     output=line.split(",")
@@ -22,8 +18,6 @@ for line in pages:
     for entry in output:
         temp_list.append(int(entry))
     list3.append(temp_list)
-
-# print(list3)
 
 answer=0
 incorrects=[]
