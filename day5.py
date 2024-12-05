@@ -1,14 +1,11 @@
 input_file = 'input/day5.txt'
 
-# Read in all the data and strip out any whitespace at the end of lines
-all_lines = [line.rstrip('\n') for line in open(input_file)]
-
-# print(all_lines)
+rules, pages = [part.splitlines() for part in open(input_file).read().split("\n\n")]
 
 list1=[]
 list2=[]
 
-for line in all_lines:
+for line in rules:
     try:
         output=line.split("|")
         list1.append(int(output[0]))
@@ -16,16 +13,9 @@ for line in all_lines:
     except:
         continue
 
-input_file = 'input/day5-2.txt'
-
-# Read in all the data and strip out any whitespace at the end of lines
-all_lines = [line.rstrip('\n') for line in open(input_file)]
-
-# print(all_lines)
-
 list3=[]
 
-for line in all_lines:
+for line in pages:
     output=line.split(",")
     # print(output)
     temp_list=[]
