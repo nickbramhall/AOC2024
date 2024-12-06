@@ -101,16 +101,92 @@ print(f'Part 1: {sum}')
 
 # Part 2
 
+# def path_tester():
+
+#     row=start_pos[1]
+#     col=start_pos[0]
+#     direction="up"
+#     visited=[(row,col)]
+#     counter=0
+#     out_of_bounds=False
+
+#     while counter < 10000:
+#         new_row,new_col = movement(row,col,direction)
+#         # print(f'Moved to {new_col},{new_row} which contains a {all_lines[new_row][new_col]}')
+#         if new_col >= no_cols or new_col < 0:
+#             out_of_bounds=True
+#             break
+#         if new_row >= no_rows or new_row < 0:
+#             out_of_bounds=True
+#             break
+#         # Get the new square contents
+#         if all_lines[new_row][new_col] == "#":
+#             # print('Square is occupied so turn')
+#             if direction == "up":
+#                 direction = "right"
+#             elif direction == "right":
+#                 direction = "down"
+#             elif direction == "down":
+#                 direction = "left"
+#             else:
+#                 direction = "up"
+#         else:
+#             # print('Square is empty so move on')
+#             if (new_row,new_col) not in visited:
+#                 visited.append((new_row,new_col))
+#             row=new_row
+#             col=new_col
+#         counter+=1
+
+#     if out_of_bounds is True:
+#         return False
+#     else:
+#         return True
+
+# # We can only place a single obstruction so it must be somewhere on the existing path. So test each square along the path for loops???
+# # What is the criteria for a loop? No out of bounds after 100 attempts?
+
+# def replace_str_index(text,index,replacement):
+#     return f'{text[:index]}{replacement}{text[index+1:]}'
+
+# count=0
+# loop_obstructions=[]
+
+# for location in path:
+#     # add obstruction at the first location
+#     if all_lines[location[0]][location[1]]!='#':
+#         #print(all_lines)
+#         all_lines[location[0]]=replace_str_index(all_lines[location[0]],location[1],'#')
+#         #print(all_lines)
+#         # all_lines[location[0]][location[1]]='#'
+#         test_result=path_tester()
+#         if test_result is False:
+#             all_lines[location[0]]=replace_str_index(all_lines[location[0]],location[1],'.')
+#         else:
+#             # print('Loop found!')
+#             if location not in loop_obstructions:
+#                 loop_obstructions.append(location)
+#                 count+=1
+#             all_lines[location[0]]=replace_str_index(all_lines[location[0]],location[1],'.')
+#         #print(all_lines)
+
+# print(f'Part 2: {count}')
+# # print(loop_obstructions)
+# # This works but is suuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuper slow
+
+start_time = time.time()
+
 def path_tester():
 
     row=start_pos[1]
     col=start_pos[0]
     direction="up"
-    visited=[(row,col)]
+    visited=[]
     counter=0
     out_of_bounds=False
+    stuck_in_loop=False
 
-    while counter < 10000:
+    while stuck_in_loop is False:
         new_row,new_col = movement(row,col,direction)
         # print(f'Moved to {new_col},{new_row} which contains a {all_lines[new_row][new_col]}')
         if new_col >= no_cols or new_col < 0:
@@ -132,8 +208,11 @@ def path_tester():
                 direction = "up"
         else:
             # print('Square is empty so move on')
-            if (new_row,new_col) not in visited:
-                visited.append((new_row,new_col))
+            # print((row,col,direction))
+            if (row,col,direction) not in visited:
+                visited.append((row,col,direction))
+            else:
+                stuck_in_loop=True
             row=new_row
             col=new_col
         counter+=1
@@ -145,6 +224,8 @@ def path_tester():
 
 # We can only place a single obstruction so it must be somewhere on the existing path. So test each square along the path for loops???
 # What is the criteria for a loop? No out of bounds after 100 attempts?
+# Revisit the obstruction location? No, this might not happen...
+# Revisit the same location and in the same orientation?
 
 def replace_str_index(text,index,replacement):
     return f'{text[:index]}{replacement}{text[index+1:]}'
@@ -169,6 +250,9 @@ for location in path:
                 count+=1
             all_lines[location[0]]=replace_str_index(all_lines[location[0]],location[1],'.')
         #print(all_lines)
+
+run_time = time.time() - start_time
+print(f'Ran in: {run_time} seconds')
 
 print(f'Part 2: {count}')
 # print(loop_obstructions)
