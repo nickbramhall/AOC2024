@@ -100,10 +100,12 @@ print(f'Part 1: {sum}')
 
 start_time = time.time()
 
-def path_tester():
+def path_tester(start_row,start_col):
 
     row=start_pos[1]
     col=start_pos[0]
+    row=start_row
+    col=start_col
     direction="up"
     visited=[]
     counter=0
