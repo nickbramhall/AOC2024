@@ -1,11 +1,9 @@
-import os
-
-input_file = 'input/day10-sample.txt'
+input_file = 'input/day10.txt'
 
 # Read in all the data and strip out any whitespace at the end of lines
 all_lines = [line.rstrip('\n') for line in open(input_file)]
 
-# Find start position
+# Find all start positions
 
 start_positions=[]
 
@@ -14,55 +12,60 @@ for line in all_lines:
     col=0
     for c in line:
         if c == "0":
-            start_pos=(row,col)
+            start_pos=(row,col,0)
             start_positions.append(start_pos)
         col+=1
     row+=1
-
-print(start_positions)
-
-def clear():
-    os.system( 'cls' )
-
-def movement(row,col,direction):
-    if direction == "up":
-        col=col
-        row=row-1
-    if direction == "down":
-        col=col
-        row=row+1
-    if direction == "left":
-        col=col-1
-        row=row
-    if direction == "right":
-        col=col+1
-        row=row
-    return row,col
-
-def grid_printer():
-    clear()
-    for i in range(no_rows):
-        row_print=''
-        for j in range(no_cols):
-            if all_lines[i][j] == "#":
-                row_print = row_print + '#'
-            elif (i,j) in visited:
-                row_print = row_print + 'X'
-            else:
-                row_print = row_print + '.'
-        print(row_print)
 
 no_rows=len(all_lines)
 no_cols=len(all_lines[0])
 
 print(f'Grid is {no_rows} rows by {no_cols} columns')
 
-def valid_moves(start_pos):
-    # Try up
+def test_inbounds(position):
+    if position[0] >= 0 and position[0] < no_rows and position[1] >= 0 and position[1] < no_cols:
+        return True
+    else:
+        return False
     
+def test_height(position):
+    new_height = int(all_lines[position[0]][position[1]])
+    if new_height - position[2] == 1:
+        return new_height
+    else:
+        return False
 
-visited=set()
+def valid_moves(position):
+    up=(position[0]-1,position[1],position[2])
+    down=(position[0]+1,position[1],position[2])
+    left=(position[0],position[1]-1,position[2])
+    right=(position[0],position[1]+1,position[2])
+    moves=[up,down,left,right]
+    for move in moves:
+        if test_inbounds(move):
+            test_new_height=test_height(move)
+            if test_new_height == 9:
+                unique_visited.add(move)
+                times_visited.append(move)
+            if test_new_height != False:
+                move = (move[0],move[1],test_new_height)
+                visited.append(move)
+            
+overall_sum=0
+pt2_overall_sum=0
 
-start_pos=(0,2)
+for start_pos in start_positions:
+    visited=[]
+    unique_visited=set()
+    times_visited=[]
+    visited.append(start_pos)
+    while visited:
+        position=visited.pop(0)
+        moves=valid_moves(position)
+    sum=len(unique_visited)
+    pt2_sum=len(times_visited)
+    overall_sum=overall_sum+sum
+    pt2_overall_sum=pt2_overall_sum+pt2_sum
 
-valid_moves=valid_moves(start_pos)
+print(f'Part 1: {overall_sum}')
+print(f'Part 2: {pt2_overall_sum}')
