@@ -18,6 +18,8 @@ print(stones)
 @lru_cache(maxsize = 128)
 def blink(stone):
     stone_string=str(stone)
+    if stone_string == '0':
+        return [1]
     if len(stone_string) % 2 == 0: 
         length_of_stone=len(stone_string)
         splitat=length_of_stone // 2
@@ -28,45 +30,28 @@ def blink(stone):
         return [value]
 
 def many_blinks(rounds):
-
-    stones_dict={'0': [1]}
+    # First add all the starting stones into a dictionary
     duplicate_stones_dict=defaultdict()
-
     for stone in stones:
         duplicate_stones_dict[f'{stone}']=1
-
+    # Now run a loop for every blink taken to determine how the stones change
     for j in range(rounds):
-        # print(f'Blink {j}')
         for k,v in duplicate_stones_dict.copy().items():
-            # print(f'Key: {k} -- Value: {v}')
+            # If value is greater than 0 then we need to determine the change to the stone
             if v > 0:
-                try:
-                    change=stones_dict[f'{k}']
-                    duplicate_stones_dict[f'{k}']-=v
-                    for item in change:
-                        try:
-                            duplicate_stones_dict[f'{item}']+=v
-                        except:
-                            duplicate_stones_dict[f'{item}']=v
-                except:
-                    #print(k)
-                    change=blink(k)
-                    #print(change)
-                    stones_dict[f'{k}']=change
-                    duplicate_stones_dict[f'{k}']-=v
-                    for item in change:
-                        try:
-                            duplicate_stones_dict[f'{item}']+=v
-                        except:
-                            duplicate_stones_dict[f'{item}']=v
-            #print(stones_dict)
-            #print(duplicate_stones_dict)
-
+                change=blink(k)
+                # Remove the existing stones we are checking
+                duplicate_stones_dict[f'{k}']-=v
+                # Loop through the response and add in the stones to the dict, either increasing or adding in a new key
+                for item in change:
+                    try:
+                        duplicate_stones_dict[f'{item}']+=v
+                    except:
+                        duplicate_stones_dict[f'{item}']=v
+    # Now add up all the values in the stones dictionary to get the total number of stones
     sum=0
-
     for k,v in duplicate_stones_dict.items():
         sum = sum + v
-
     return sum
 
 part1=many_blinks(25)
