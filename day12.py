@@ -1,4 +1,4 @@
-input_file = 'input/day12.txt'
+input_file = 'input/day12-sample.txt'
 
 # Read in all the data and strip out any whitespace at the end of lines
 all_lines = [line.rstrip('\n') for line in open(input_file)]
@@ -90,18 +90,33 @@ while to_visit:
         # print(f'To visit: {to_visit}')
         # print(f'Removing: {(current_plot[0],current_plot[1])} from to_visit')
         to_visit.remove((current_plot[0],current_plot[1]))
-    region_dict[i]={'area':region_area, 'perimeter':region_perimeter}
+    region_dict[i]={'region':current_region, 'area': region_area, 'perimeter': region_perimeter, 'cells': searched}
     
     i+=1
 
-    # print(region_dict)
+print(region_dict)
 
-    sum=0
+sum=0
 
-    for k,v in region_dict.items():
-        calculation=v['area']*v['perimeter']
-        sum=sum+calculation
+for k,v in region_dict.items():
+    calculation=v['area']*v['perimeter']
+    sum=sum+calculation
 
-    print(sum)
+print(sum)
+
+# Part 2
+
+def check_for_corners(region,cell):
+    # Try up
+    for direction in moves:
+        new_row,new_col=movement(cell[0],cell[1],direction)
+        if new_row >= 0 and new_row < no_rows and new_col >=0 and new_col < no_cols:
+            inbounds=True
+            if new_region=grid[new_row][new_col] == region:
+                sameregion=True
+            
 
 
+for k,v in region_dict.items():
+    for cell in v['cells']:
+        print(cell)
