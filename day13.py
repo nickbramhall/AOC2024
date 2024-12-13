@@ -88,6 +88,7 @@ print(money)
 # Super helpful reddit post about linear algebra and Cramer's Rule
 # https://www.reddit.com/r/adventofcode/comments/1hd7irq/2024_day_13_an_explanation_of_the_mathematics/
 # https://en.wikipedia.org/wiki/Cramer%27s_rule
+# 
 
 # A = (p_x*b_y - prize_y*b_x) / (a_x*b_y - a_y*b_x)
 # B = (a_x*p_y - a_y*p_x) / (a_x*b_y - a_y*b_x)

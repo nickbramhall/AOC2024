@@ -1,4 +1,4 @@
-input_file = 'input/day12-sample.txt'
+input_file = 'input/day12.txt'
 
 # Read in all the data and strip out any whitespace at the end of lines
 all_lines = [line.rstrip('\n') for line in open(input_file)]
@@ -19,7 +19,7 @@ for line in all_lines:
     grid.append(temp_list)
     row+=1
 
-# print(grid)
+print(grid)
 # print(to_visit)
 
 no_rows=len(grid)
@@ -94,7 +94,7 @@ while to_visit:
     
     i+=1
 
-print(region_dict)
+# print(region_dict)
 
 sum=0
 
@@ -102,21 +102,111 @@ for k,v in region_dict.items():
     calculation=v['area']*v['perimeter']
     sum=sum+calculation
 
-print(sum)
+print(f'Part 1 Price: {sum}')
 
 # Part 2
 
-def check_for_corners(region,cell):
-    # Try up
-    for direction in moves:
-        new_row,new_col=movement(cell[0],cell[1],direction)
-        if new_row >= 0 and new_row < no_rows and new_col >=0 and new_col < no_cols:
-            inbounds=True
-            if new_region=grid[new_row][new_col] == region:
-                sameregion=True
-            
+# Part 2 answer taken from this reddit post: https://www.reddit.com/r/adventofcode/comments/1hcf16m/comment/m1nrmzw/
 
+expanded_grid=[]
+top_bottom_list=[]
+
+for i in range(no_cols+2):
+    top_bottom_list.append('.')
+
+expanded_grid.append(top_bottom_list)
+for line in all_lines:
+    temp_list=[]
+    col=0
+    temp_list.append('.')
+    for c in line:
+        temp_list.append(c)
+        to_visit.append((row,col))
+        col+=1
+    temp_list.append('.')
+    expanded_grid.append(temp_list)
+    row+=1
+expanded_grid.append(top_bottom_list)
+
+# print(expanded_grid)
+
+def check_for_corners(region,cell):
+    # print(region)
+    corner=0
+    try:
+        left=expanded_grid[cell[0]][cell[1]-1]
+    except:
+        left = '-X'
+    try:
+        top_left=expanded_grid[cell[0]-1][cell[1]-1]
+    except:
+        top_left = '-X'
+    try:
+        top=expanded_grid[cell[0]-1][cell[1]]
+    except:
+        top = '-X'
+    try:
+        top_right=expanded_grid[cell[0]-1][cell[1]+1]
+    except:
+        top_right = '-X'
+    try:
+        right=expanded_grid[cell[0]][cell[1]+1]
+    except:
+        right = '-X'
+    try:
+        bottom_right=expanded_grid[cell[0]+1][cell[1]+1]
+    except:
+        bottom_right = '-X'
+    try:
+        bottom=expanded_grid[cell[0]+1][cell[1]]
+    except:
+        bottom = '-X'
+    try:
+        bottom_left=expanded_grid[cell[0]+1][cell[1]-1]
+    except:
+        bottom_left = '-X'
+
+    # print(f'{top}-{top_right}-{right}-{bottom_right}-{bottom}-{bottom_left}-{left}-{top_left}')
+
+    if left != region and top != region:
+        corner+=1
+
+    if left == region and top == region and top_left != region:
+        corner+=1
+
+    if top != region and right != region:
+        corner+=1
+
+    if top == region and right == region and top_right != region:
+        corner+=1
+
+    if right != region and bottom != region:
+        corner+=1
+
+    if right == region and bottom == region and bottom_right != region:
+        corner+=1
+
+    if bottom != region and left != region:
+        corner+=1
+
+    if bottom == region and left == region and bottom_left != region:
+        corner+=1
+
+    return corner
+            
+all_corners=0
+price=0
 
 for k,v in region_dict.items():
+    total_corners = 0
     for cell in v['cells']:
-        print(cell)
+        cell=(cell[0]+1,cell[1]+1)
+        # print(cell)
+        corners = check_for_corners(v['region'],cell)
+        total_corners = total_corners + corners
+    fence_cost=total_corners*v['area']
+    price=price+(fence_cost)
+    # print(fence_cost)
+    all_corners=all_corners+total_corners
+
+print(f'Part 2 Price: {price}')
