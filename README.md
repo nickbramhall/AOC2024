@@ -15,3 +15,5 @@ A repository for my Advent of Code 2024 attempts using Python!
 * [Day 9](day9.py) - Solved for 2 stars! ⭐⭐
 * [Day 10](day10.py) - Solved for 2 stars! ⭐⭐
 * [Day 11](day11.py) - Solved for 2 stars! ⭐⭐
+* [Day 12](day12.py) - Solved for 2 stars! ⭐⭐
+* [Day 13](day13.py) - Solved for 2 stars! ⭐⭐
